@@ -1,0 +1,72 @@
+/* ============================================================
+   sf-choice-field 的樣式
+   就像原生 CSS 的 .class：改這裡，所有用到的地方一起變。
+   顏色、圓角寫成 var(--sf-*, 預設值)，讓使用者可以用 CSS 變數覆寫。
+   ============================================================ */
+
+
+@theme {
+  --color-sf-hover:#f3f4f6;
+  --color-sf-border:#d1d5db;
+  --color-sf-check-border:#2563eb;
+  --color-sf-check-bg:#2563eb;
+  --radius-sf-radius:0px;
+}
+
+/* 選項按鈕 */
+@utility sf-option {
+  /* 基本外觀 */
+  @apply flex items-center justify-center 
+        -ml-px h-10 px-4 whitespace-nowrap text-sm
+         border border-sf-border
+         bg-[var(--sf-color-bg,#ffffff)] text-[var(--sf-color-text,#1f2937)];
+  
+  /* 第一顆、最後一顆的圓角（按鈕連在一起） */
+  @apply first:ml-0 first:rounded-l-sf-radius last:rounded-r-sf-radius;
+
+  /* 滑鼠移上去（未選中時） */
+  @apply not-aria-checked:hover:bg-sf-hover;
+
+  /* 被選中 */
+  @apply aria-checked:relative aria-checked:z-10 aria-checked:text-white
+         aria-checked:border-sf-check-border
+         aria-checked:bg-sf-check-bg;
+
+  /* 停用 */
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
+
+  /* 必填錯誤時，邊框變紅 */
+  @apply group-data-[invalid=true]:border-red-600;
+}
+
+/* ===== select 模式 ===== */
+
+/* 觸發框：填滿容器寬度 */
+@utility sf-trigger {
+  @apply flex w-full h-10 items-center justify-between gap-2 px-3 text-sm text-left cursor-pointer
+         border border-sf-border rounded-sf-radius
+         bg-[var(--sf-color-bg,#ffffff)] text-[var(--sf-color-text,#1f2937)];
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
+  @apply group-data-[invalid=true]:border-red-600;
+}
+
+/* 尚未選擇時的提示文字 */
+@utility sf-placeholder {
+  @apply text-[var(--sf-color-muted,#9ca3af)];
+}
+
+/* 下拉面板：出現在觸發框正下方，寬度與觸發框相同 */
+@utility sf-panel {
+  @apply absolute left-0 right-0 top-full z-10 mt-1 py-1 max-h-60 overflow-y-auto
+         border border-sf-border rounded-sf-radius
+         bg-[var(--sf-color-bg,#ffffff)] shadow-lg;
+}
+
+/* 面板中的每個選項 */
+@utility sf-panel-option {
+  @apply flex w-full h-10 items-center justify-between px-3 text-sm text-left cursor-pointer
+         bg-transparent border-0 text-[var(--sf-color-text,#1f2937)];
+  @apply hover:bg-sf-hover;
+  @apply aria-selected:text-[var(--sf-color-primary,#2563eb)] aria-selected:font-bold;
+  @apply disabled:cursor-not-allowed disabled:opacity-50;
+}

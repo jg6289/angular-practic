@@ -1,0 +1,27 @@
+/* 不載入 preflight：和封裝後的元件庫相同設定，開發時看到的就是最後的樣子 */
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* 元件的自訂 class（sf-label、sf-option、sf-error） */
+@import "./app/choice-field/choice-field.styles.css";
+
+/* ↓ 以下是展示頁自己的樣式，和元件無關 */
+body { margin: 0; font-family: system-ui, "Noto Sans TC", sans-serif; background: #f5f7f8; color: #13212e; }
+
+
+@theme {
+  --color-brand: #0f766e;
+  --radius-brand: 6px;
+}
+
+/* ===== 範例：@theme 統一修改一個數值 ===== */
+@theme {
+  --color-button-brand: #02DF82;
+}
+
+/* ===== 範例：@utility 統一修改一整組樣式 ===== */
+@utility demo-option {
+  @apply px-4 py-2 text-sm  border border-gray-300 bg-white rounded-brand cursor-pointer;
+  &[aria-checked="true"] { @apply bg-button-brand border-button-brand text-white; }
+}
