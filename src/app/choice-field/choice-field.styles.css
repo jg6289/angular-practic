@@ -70,3 +70,45 @@
   @apply aria-selected:text-[var(--sf-color-primary,#2563eb)] aria-selected:font-bold;
   @apply disabled:cursor-not-allowed disabled:opacity-50;
 }
+
+
+
+/* ===== popover 模式 ===== */
+
+/* 面板：分成「搜尋列／清單／底部按鈕」三區，只有清單會捲動 */
+@utility sf-popover {
+  @apply absolute left-0 right-0 top-full z-10 mt-1 flex flex-col
+         border border-sf-border rounded-sf-radius
+         bg-[var(--sf-color-bg,#ffffff)] shadow-lg;
+}
+
+/* 頂部搜尋列 */
+@utility sf-search {
+  @apply block m-2 h-8 px-2 text-sm
+         border border-sf-border rounded-sf-radius
+         bg-[var(--sf-color-bg,#ffffff)] text-[var(--sf-color-text,#1f2937)];
+}
+
+/* 中間的清單：超過高度時捲動 */
+@utility sf-popover-list {
+  @apply max-h-48 overflow-y-auto border-y border-sf-border;
+}
+
+/* 底部按鈕列 */
+@utility sf-popover-footer {
+  @apply flex justify-end gap-2 p-2;
+}
+
+/* 一般按鈕（取消） */
+@utility sf-btn {
+  @apply h-8 px-3 text-sm cursor-pointer
+         border border-sf-border rounded-sf-radius
+         bg-[var(--sf-color-bg,#ffffff)] text-[var(--sf-color-text,#1f2937)];
+  @apply hover:bg-sf-hover;
+}
+
+/* 主要按鈕（套用） */
+@utility sf-btn-primary {
+  @apply h-8 px-3 text-sm cursor-pointer text-white
+         border border-sf-check-border rounded-sf-radius bg-sf-check-bg;
+}

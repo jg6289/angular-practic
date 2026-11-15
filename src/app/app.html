@@ -2,27 +2,30 @@
   <h1 class="text-2xl font-bold m-0">sf-choice-field 布局</h1>
   <p class="text-sm text-gray-500 m-0">虛線框寬 360px。</p>
 
-  <form [formGroup]="form" (ngSubmit)="search()" class="grid gap-8">
     <section class="grid gap-4 p-6 bg-white border border-gray-200 rounded-xl">
-      <div class="flex flex-wrap gap-6">
-        <div class="w-[360px] p-3 border border-dashed border-gray-400 grid gap-1.5">
-          <label id="status-top" class="text-sm font-bold">狀態 <span class="text-red-600">*</span></label>
-          <sf-choice-field [options]="statuses" formControlName="status" />
-          @if (form.controls.status.invalid && form.controls.status.touched) {
-            <p class="m-0 text-xs text-red-600">請選擇狀態</p>
-          }
-        </div>
-        <div class="w-[360px] p-3 border border-dashed border-gray-400 grid gap-1.5">
-          <label id="dept-top" class="text-sm font-bold">部門 <span class="text-red-600">*</span></label>
-          <sf-choice-field displayMode="select" placeholder="請選擇部門"
-                           [options]="depts" formControlName="dept" />
-          @if (form.controls.dept.invalid && form.controls.dept.touched) {
-            <p class="m-0 text-xs text-red-600">請選擇部門</p>
-          }
-        </div>
+    <div class="flex flex-wrap gap-6">
+
+      <!-- 狀態：button-group -->
+      <div class="w-[360px] p-3 border border-dashed border-gray-400 grid gap-1.5">
+        <label class="text-sm font-bold">狀態</label>
+        <sf-choice-field displayMode="button-group" [options]="statuses" [(value)]="status" />
       </div>
-    </section>
-  </form>
+
+      <!-- 部門：select -->
+      <div class="w-[360px] p-3 border border-dashed border-gray-400 grid gap-1.5">
+        <label class="text-sm font-bold">部門</label>
+        <sf-choice-field displayMode="select" placeholder="請選擇部門" [options]="depts" [(value)]="dept" />
+      </div>
+
+      <!-- 城市：popover -->
+      <div class="w-[360px] p-3 border border-dashed border-gray-400 grid gap-1.5">
+        <label class="text-sm font-bold">城市</label>
+        <sf-choice-field displayMode="popover" placeholder="請選擇" [options]="cities" [(value)]="city" />
+      </div>
+
+    </div>
+    <p class="text-sm text-gray-500 m-0">狀態：{{ status() }}　部門：{{ dept() }}　城市：{{ city() }}</p>
+  </section>
   
   
 <section>
@@ -44,4 +47,5 @@
     <button>對比</button>
   </div>
 </section>
+
 </main>

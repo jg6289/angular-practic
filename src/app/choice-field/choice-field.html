@@ -1,23 +1,22 @@
 <div (focusout)="onFocusOut($event)">
   @if (displayMode() === 'button-group') {
     <!-- button-group：選項直接攤開 -->
-    <div role="radiogroup"
-         class="inline-flex max-w-full overflow-x-auto">
+    <div role="radiogroup" class="inline-flex max-w-full overflow-x-auto">
       @for (o of options(); track o.value) {
         <button type="button" role="radio" class="sf-option"
                 [attr.aria-checked]="o.value === value()"
-                [disabled]="isDisabled() || o.disabled"
+                [disabled]="disabled() || o.disabled"
                 (click)="pick(o.value)">
           {{ o.label }}
         </button>
       }
     </div>
-  } @else {
+  } @else if (displayMode() === 'select') {
     <!-- select：觸發框＋下拉面板 -->
     <div class="relative">
       <button type="button" class="sf-trigger"
               [attr.aria-expanded]="open()"
-              [disabled]="isDisabled()"
+              [disabled]="disabled()"
               (click)="toggle()" (keydown.escape)="open.set(false)">
         @if (selectedLabel(); as text) {
           <span class="truncate">{{ text }}</span>
@@ -28,8 +27,7 @@
       </button>
 
       @if (open()) {
-        <div role="listbox" class="sf-panel" 
-             (keydown.escape)="open.set(false)">
+        <div role="listbox" class="sf-panel" (keydown.escape)="open.set(false)">
           @for (o of options(); track o.value) {
             <button type="button" role="option" class="sf-panel-option"
                     [attr.aria-selected]="o.value === value()"
@@ -39,6 +37,44 @@
               @if (o.value === value()) { <span aria-hidden="true">✓</span> }
             </button>
           }
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- popover：觸發框＋面板（輸入框／清單／取消、套用） -->
+    <div class="relative">
+      <button type="button" class="sf-trigger"
+              [attr.aria-expanded]="open()"
+              [disabled]="disabled()"
+              (click)="toggle()" (keydown.escape)="cancel()">
+        @if (selectedLabel(); as text) {
+          <span class="truncate">{{ text }}</span>
+        } @else {
+          <span class="truncate sf-placeholder">{{ placeholder() }}</span>
+        }
+        <span aria-hidden="true">▾</span>
+      </button>
+
+      @if (open()) {
+        <div class="sf-popover" (keydown.escape)="cancel()">
+          <input type="text" class="sf-search" placeholder="搜尋…" />
+
+          <div role="listbox" class="sf-popover-list">
+            @for (o of options(); track o.value) {
+              <button type="button" role="option" class="sf-panel-option"
+                      [attr.aria-selected]="o.value === draft()"
+                      [disabled]="o.disabled"
+                      (click)="choose(o.value)">
+                {{ o.label }}
+                @if (o.value === draft()) { <span aria-hidden="true">✓</span> }
+              </button>
+            }
+          </div>
+
+          <div class="sf-popover-footer">
+            <button type="button" class="sf-btn" (click)="cancel()">取消</button>
+            <button type="button" class="sf-btn-primary" (click)="apply()">套用</button>
+          </div>
         </div>
       }
     </div>

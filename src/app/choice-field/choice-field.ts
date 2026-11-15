@@ -16,7 +16,7 @@ export interface ChoiceOption {
   },
 })  
 export class ChoiceField implements ControlValueAccessor {
-  displayMode = input<'button-group' | 'select'>('select');
+  displayMode = input<'button-group' | 'select' | 'popover'>('select');
   options = input<ChoiceOption[]>([]);
   value = model<string | null>(null);
   disabled = input(false);
@@ -31,6 +31,14 @@ export class ChoiceField implements ControlValueAccessor {
   protected selectedLabel = computed(
     () => this.options().find(o => o.value === this.value())?.label ?? null,
   );
+
+    // popover 模式：搜尋文字、暫存的選擇（按「套用」才寫回 value）
+  protected query = signal('');
+  protected draft = signal<string | null>(null);
+  protected filtered = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    return q ? this.options().filter(o => o.label.toLowerCase().includes(q)) : this.options();
+  });
 
   // ===== 表單串接 =====
   // 取得使用者綁定的表單控制項（formControl / formControlName / ngModel）
@@ -72,7 +80,29 @@ export class ChoiceField implements ControlValueAccessor {
   }
 
   protected toggle() {
+    // popover 每次打開時：清空搜尋、暫存值從目前的 value 開始
+    if (!this.open() && this.displayMode() === 'popover') {
+      this.query.set('');
+      this.draft.set(this.value());
+    }
     this.open.update(o => !o);
+  }
+
+  // ===== popover =====
+  protected choose(v: string) {
+    this.draft.set(v);                 // 只改暫存值，還不送出
+  }
+
+  protected apply() {
+    const next = this.draft();
+    this.value.set(next);
+    this.onChange(next);               // 按「套用」才通知表單
+    this.open.set(false);
+    this.onTouched();
+  }
+
+  protected cancel() {
+    this.open.set(false);              // 直接收起，暫存值丟掉
   }
 
   // 焦點離開整個元件時：收起面板、通知表單已操作過
